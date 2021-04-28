@@ -1,8 +1,8 @@
 import React, {useContext}from 'react'
 import {Typography, AppBar, Toolbar, IconButton, Button, makeStyles} from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
-import {MovieContext} from './MovieContext'
-import AddMovieModalButton from './AddMovieModalButton'
+import {EmployeeContext} from './EmployeeContext'
+import AddMovieModalButton from './AddEmployeeModalBtn'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,11 +19,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = () =>{
     const classes = useStyles()
-    const [movies, setMovies] = useContext(MovieContext)
+    const [movies, setMovies] = useContext(EmployeeContext)
 
     return (
         <div className={classes.root}>
-          <AppBar position="static">
+          <AppBar position="relative">
             <Toolbar>
               <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                 <MenuIcon />
