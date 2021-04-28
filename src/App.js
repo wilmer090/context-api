@@ -1,9 +1,9 @@
 import React from 'react'
-import MovieList from './MovieList'
-import {MovieProvider} from './MovieContext'
+import EmployeeList from './EmployeeList'
+import {MovieProvider} from './EmployeeContext'
 import Navbar from './Navbar'
-import {Typography, AppBar, Toolbar, CssBaseline} from '@material-ui/core'
-import AddMovie from './AddMovie'
+import {CssBaseline} from '@material-ui/core'
+
 
 const App = () =>{
 
@@ -12,7 +12,7 @@ const App = () =>{
       <CssBaseline />
       <MovieProvider>
           <Navbar />
-          <MovieList />
+          <EmployeeList />
       </MovieProvider>
     </>
   )
