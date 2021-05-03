@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useContext}from 'react'
 import {useForm} from 'react-hook-form'
-import {Modal, Backdrop, Fade, Button, TextField} from '@material-ui/core'
+import {Modal, Backdrop, Fade, Button, TextField, FormControl,MenuItem, InputLabel, Select, Input, ListItemText, useTheme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import {EmployeeContext} from './EmployeeContext'
+import NativeSelect from '@material-ui/core/NativeSelect';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -12,7 +13,16 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'center',
       '& .MuiTextField-root' : {
           margin: theme.spacing(2)
+      },
+      '& .MuiButtonBase-root' : {
+          width: "90%",
+          marginLeft: theme.spacing(2),
+          marginTop: theme.spacing(2)
       }
+    },
+    addbtn: {
+      float: "right",
+      margin: theme.spacing(3)
     },
     paper: {
       backgroundColor: theme.palette.background.paper,
@@ -24,92 +34,142 @@ const useStyles = makeStyles((theme) => ({
         marginLeft : theme.spacing(2),
         marginTop : theme.spacing(0),
         marginBottom : theme.spacing(0)
-    }
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        marginLeft: theme.spacing(2),
+        minWidth: 120,
+        width: "90%"
+      },
+      chips: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
+      chip: {
+        margin: 2,
+      },
+      noLabel: {
+        marginTop: theme.spacing(3),
+      }
   }));
 
 
-const AddMovieModalButton = () =>{
+const AddEmployeeModal = () =>{
 
     const classes = useStyles()
 
     const [open, setOpen] = useState(false)
     
-    const [employees, setEmployees] = useContext(EmployeeContext)
-
+    const {addEmployee} = useContext(EmployeeContext)
+ 
     const handleClose = () =>{
         setOpen(false)
     }   
     const handleOpen = () =>{
         setOpen(true)
     }
-    const {register, handleSubmit, reset, formState:{errors}} = useForm()
 
-    const onSubmit = ({firstName, lastName, position, address}, e) =>{
-        setEmployees(prevMovies => [...prevMovies, 
-            {
-                firstName : firstName, lastName : lastName, 
-                status: "Active", 
-                position: position, emp_id : `${new Date().valueOf()}`, 
-                address : address
-            }])
-            
-            reset({})
+    const [positionData, setPositionData] = useState()
+
+    const positionList = ["CS", "FRONTEND", "BACKEND", "CONTENT WRITER", "DATA ANALYST"]
+
+    const handleChange = (e) =>{
+        setPositionData(e.target.value)
     }
 
-    return(
-        <>
-         <div>
-            <Button type="button" onClick={handleOpen} variant="contained" color="secondary">
-                ADD MOVIE
-            </Button>
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                className={classes.modal}
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                timeout: 500,
-                }}
-            >
-            <Fade in={open}>
-              <div className={classes.paper}>
-                <h2 id="transition-modal-title">Add new movie</h2>
-                <p id="transition-modal-description">lorem ip sum.</p>
+    const {register, handleSubmit, reset, formState:{errors}} = useForm()
 
-                <div>
-                    <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+    const onSubmit = (data) =>{
+        data = {...data, emp_id : new Date().valueOf().toString(), status : "ACTIVE", isDeleted : false}
+      
+        let newObject = {}
+    
+        for(let [key, value] of Object.entries(data)){
+            newObject[key] = (typeof value != "boolean" )? value.toUpperCase() : value
+        }
+       
+        addEmployee(newObject)
 
-                        <div>
-                        <TextField type="text" variant="outlined" {...register("firstName")} label="First Name" />
-                        <p className={classes.message}>{errors.firstName && errors.firstName.message}</p>
-                        </div>
+        reset({})            
+    }
 
-                        <div>
-                        <TextField type="text" variant="outlined" {...register("lastName")} label="Last Name" />
-                        <p className={classes.message}>{errors.lastName && errors.lastName.message}</p>
-                        </div>
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+        style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+            },
+        },
+    };
 
-                        <div>
-                        <TextField type="text" variant="outlined" {...register("position")} label="Position" />
-                        <p className={classes.message}>{errors.position && errors.position.message}</p>
-                        </div>
+  return(
+    <>
+      <div>
+      <Button type="button" className={classes.addbtn} onClick={handleOpen} variant="contained" color="secondary">
+            insert record
+      </Button>
+      <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classes.modal}
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+          timeout: 500,
+          }}
+      >
+      <Fade in={open}>
+      <div className={classes.paper}>
+        <h2 id="transition-modal-title">Add Information</h2>
+        <p id="transition-modal-description">Employee.</p>
 
-                        <div>
-                        <TextField type="text" variant="outlined" {...register("address")} label="Address" placeholder="city, country"/>
-                        <p className={classes.message}>{errors.address && errors.address.message}</p>
-                        </div>     
-                        <Button type="submit">Add</Button>
-                    </form>
-                </div>
-               </div>
-            </Fade>
-            </Modal>
+        <div>
+         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <div>
+          <TextField type="text" variant="outlined" error={errors.firstName? true : false} {...register("firstName", {required : "Please fill up this field"})} label="First Name" helperText={errors.firstName && errors.firstName.message}/>
           </div>
-        </>
+
+          <div>
+          <TextField type="text" variant="outlined" error={errors.lastName? true : false} {...register("lastName", {required : "Please fill up this field"})} label="Last Name" helperText={errors.lastName && errors.lastName.message}/>
+          </div>
+
+          <div>
+          <TextField type="text" variant="outlined" error={errors.address? true : false} {...register("address", {required : "Please fill up this field"})} label="Address" placeholder="city, country" helperText={errors.address && errors.address.message}/>
+          </div> 
+
+        <div>
+          <FormControl className={classes.formControl}>
+            <InputLabel id="demo-mutiple-name-label">Position</InputLabel>
+            <NativeSelect
+            labelId="demo-mutiple-name-label" id="demo-mutiple-name"
+            value={positionData} onChange={handleChange}
+            input={<Input />} MenuProps={MenuProps}
+            variant="outlined" {...register("position", {required : "Please fill up this field"})}
+            defaultValue={""}
+           >
+            <option aria-label="None" value="" />
+            <option value="FRONTEND">Front-end</option>
+            <option value="BACKEND">Back-end</option>
+            <option value="CS">CS</option>
+            <option value="CONTENT WRITER">Content writer</option>
+            <option value="ENCODER">Encoder</option>
+          </NativeSelect>
+        </FormControl>
+      
+       </div>    
+      <Button type="submit" variant="contained" color="primary">Save</Button>
+    </form>
+    </div>
+    </div>
+    </Fade>
+    </Modal>
+    </div>
+  </>
     )
 }
 
-export default AddMovieModalButton
+export default AddEmployeeModal
