@@ -1,6 +1,7 @@
 import React, {useContext} from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import {EmployeeContext} from './EmployeeContext'
+import {Link} from 'react-router-dom'
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,6 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import {Button} from '@material-ui/core'
 
 
 
@@ -53,6 +55,18 @@ const columns = [
       align : 'right',
       format : (value) => value.toFixed(2),
     },
+    {
+      id: 'edit',
+      label : '',
+      minWidth: 170,
+      align: 'right'
+    },
+    {
+      id: 'delete',
+      label : '',
+      minWidth: 170,
+      align: 'left'
+    }
   ];
   
  
@@ -67,9 +81,16 @@ const columns = [
     },
   }));
 
-const MovieList = () =>{
+const EmployeeList = () =>{
 
-    const [employees, setEmployees] = useContext(EmployeeContext)
+    const {employees, deleteEmployeeInfo } = useContext(EmployeeContext)
+    
+    employees.map(employee => {
+      return(
+      employee.edit = <Button variant="contained" color="primary"><Link to={`/edit/${employee.emp_id}`} style={{color:"#fff", textDecoration: "none"}}>Edit</Link></Button>,
+      employee.delete = <Button variant="contained" value={employee.emp_id} onClick={()=> deleteEmployeeInfo(employee.emp_id)}color="primary" style={{backgroundColor: "maroon"}}>Delete</Button>
+      ) 
+    })
     const rows = employees
     const id = new Date().valueOf()
     
@@ -134,4 +155,4 @@ return (
 
 }
 
-export default MovieList
+export default EmployeeList
