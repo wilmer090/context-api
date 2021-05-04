@@ -1,9 +1,15 @@
 export default(state, action) =>{
     switch(action.type){
         case 'ADD_EMPLOYEE' :
+
+            // setTimeout(()=>{
+                
+            // },5000)
             return{
                 employees : [action.payload, ...state.employees]
             }
+            console.log('...loading')
+          
         case 'UPDATE_RECORD' :
 
             const targetRecord = action.payload

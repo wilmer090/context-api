@@ -4,7 +4,9 @@ import {Modal, Backdrop, Fade, Button, TextField, FormControl,MenuItem, InputLab
 import { makeStyles } from '@material-ui/core/styles';
 import {EmployeeContext} from './EmployeeContext'
 import NativeSelect from '@material-ui/core/NativeSelect';
-
+import {BeatLoader} from 'react-spinners'
+import AddIcon from '@material-ui/icons/Add';
+import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -59,6 +61,8 @@ const AddEmployeeModal = () =>{
     const classes = useStyles()
 
     const [open, setOpen] = useState(false)
+
+    const [isLoading, setLoading] = useState(false)
     
     const {addEmployee} = useContext(EmployeeContext)
  
@@ -70,8 +74,6 @@ const AddEmployeeModal = () =>{
     }
 
     const [positionData, setPositionData] = useState()
-
-    const positionList = ["CS", "FRONTEND", "BACKEND", "CONTENT WRITER", "DATA ANALYST"]
 
     const handleChange = (e) =>{
         setPositionData(e.target.value)
@@ -88,9 +90,17 @@ const AddEmployeeModal = () =>{
             newObject[key] = (typeof value != "boolean" )? value.toUpperCase() : value
         }
        
-        addEmployee(newObject)
+        setLoading(true)
 
-        reset({})            
+        setTimeout(()=>{
+
+          addEmployee(newObject)
+
+          reset({})
+
+          setLoading(false)
+
+        }, 3000)     
     }
 
     const ITEM_HEIGHT = 48;
@@ -107,7 +117,7 @@ const AddEmployeeModal = () =>{
   return(
     <>
       <div>
-      <Button type="button" className={classes.addbtn} onClick={handleOpen} variant="contained" color="secondary">
+      <Button type="button" className={classes.addbtn} onClick={handleOpen} variant="contained" color="secondary" startIcon={<AddIcon/>}>
             insert record
       </Button>
       <Modal
@@ -161,7 +171,11 @@ const AddEmployeeModal = () =>{
         </FormControl>
       
        </div>    
-      <Button type="submit" variant="contained" color="primary">Save</Button>
+      <Button type="submit" variant="contained" color="primary" startIcon={<SaveIcon/>}>
+
+        {(isLoading)? <BeatLoader color="#fff" loading={isLoading}/> :  'Save'}
+        
+      </Button>
     </form>
     </div>
     </div>

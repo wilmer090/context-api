@@ -2,12 +2,14 @@ import React,{useState, useContext} from 'react'
 import {EmployeeContext} from './EmployeeContext'
 import {Container, Button, TextField, FormControl,MenuItem, InputLabel, Select, Input, CssBaseline } from '@material-ui/core'
 import {useForm} from 'react-hook-form'
-import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from 'react-router';
+import { makeStyles } from '@material-ui/core/styles'
+import { useHistory } from 'react-router'
 import {Link} from 'react-router-dom'
 import Navbar from './Navbar'
-import NativeSelect from '@material-ui/core/NativeSelect';
-
+import NativeSelect from '@material-ui/core/NativeSelect'
+import {BeatLoader} from 'react-spinners'
+import SaveIcon from '@material-ui/icons/Save';
+import CloseIcon from '@material-ui/icons/Close';
 const useStyles = makeStyles((theme) => ({
     editComponent: {
       display: "flex",
@@ -77,13 +79,12 @@ export const EditEmployeeInfo = ({match}) => {
     
     const employee_info = employees.find(employee => employee.emp_id === match.params.id)
 
-    const [positionData, setPositionData] = useState()
+    const [isLoading, setLoading] = useState(false)
 
     const [selectedEmpInfo, setSelectedEmpInfo] = useState(employee_info)
     
     const history = useHistory()
 
-    const positionList = ["CS", "FrontEnd", "BackEnd", "Content Writer"]
     
     const ITEM_HEIGHT = 48;
     const ITEM_PADDING_TOP = 8;
@@ -103,12 +104,31 @@ export const EditEmployeeInfo = ({match}) => {
     
     const onSubmit = (e) =>{
         e.preventDefault()
-        editEmployeeRecord(selectedEmpInfo)
-        history.push("/")
+          let SELECTED_EMP = {}
+          setLoading(true)
+
+          setTimeout(()=>{
+            try{
+              
+              for(const [key, value] of Object.entries(selectedEmpInfo)){
+                SELECTED_EMP = {...SELECTED_EMP, [key] : value.toUpperCase()}
+              }
+
+            }catch(e){
+              //console.log(e)
+            }
+            
+            editEmployeeRecord(SELECTED_EMP)
+            setLoading(false)
+            history.push("/")
+          },3000)
+          
+         
+       
+      
     }
     
     const handleData = (e) =>{
-        console.log(e.target.value)
        setSelectedEmpInfo({...selectedEmpInfo, [e.target.name] : e.target.value})
     }
     return (
@@ -145,8 +165,10 @@ export const EditEmployeeInfo = ({match}) => {
         </NativeSelect>
         </FormControl>
     
-       <Button type="submit" variant="contained" color="primary">Save</Button>
-       <Button variant="contained" color="secondary"><Link to="/" className={classes.btnLink}>Cancel</Link></Button>
+        <Button type="submit" variant="contained" color="primary" startIcon={<SaveIcon/>}>
+          {(isLoading)? <BeatLoader color='#fff'/> : 'Update'}
+        </Button>
+        <Button variant="contained" color="secondary" startIcon={<CloseIcon/>}><Link to="/" className={classes.btnLink}>Cancel</Link></Button>
       </form>
       
       </Container>

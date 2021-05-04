@@ -11,9 +11,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import {Button} from '@material-ui/core'
-
-
-
+import AlertDialogSlide from './TransitionDialog'
+import EditIcon from '@material-ui/icons/Edit';
 
 const columns = [
     { 
@@ -81,16 +80,19 @@ const columns = [
     },
   }));
 
+  // <Button variant="contained" value={employee.emp_id} onClick={()=> deleteEmployeeInfo(employee.emp_id) } color="primary" style={{backgroundColor: "maroon"}}>Delete</Button>
+  
 const EmployeeList = () =>{
 
     const {employees, deleteEmployeeInfo } = useContext(EmployeeContext)
     
     employees.map(employee => {
       return(
-      employee.edit = <Button variant="contained" color="primary"><Link to={`/edit/${employee.emp_id}`} style={{color:"#fff", textDecoration: "none"}}>Edit</Link></Button>,
-      employee.delete = <Button variant="contained" value={employee.emp_id} onClick={()=> deleteEmployeeInfo(employee.emp_id)}color="primary" style={{backgroundColor: "maroon"}}>Delete</Button>
+      employee.edit = <Button variant="contained" color="primary" startIcon={<EditIcon />}><Link to={`/edit/${employee.emp_id}`} style={{color:"#fff", textDecoration: "none"}}>Edit</Link></Button>,
+      employee.delete =   <AlertDialogSlide message={'Are sure you want to delete this record'} data={employee.emp_id} label={"DELETE"} deleteEmployeeInfo={deleteEmployeeInfo}/>
       ) 
     })
+
     const rows = employees
     const id = new Date().valueOf()
     
@@ -100,12 +102,12 @@ const EmployeeList = () =>{
 
     const handleChangePage = (event, newPage) => {
     setPage(newPage);
-};
+    };
 
-const handleChangeRowsPerPage = (event) => {
-  setRowsPerPage(+event.target.value);
-  setPage(0);
-};
+    const handleChangeRowsPerPage = (event) => {
+      setRowsPerPage(+event.target.value);
+      setPage(0);
+    };
 
 return (
   <Paper className={classes.root}>
