@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext}from 'react'
+import React, {useState, useContext}from 'react'
 import {useForm} from 'react-hook-form'
 import {Modal, Backdrop, Fade, Button, TextField, FormControl,MenuItem, InputLabel, Select, Input, ListItemText, useTheme } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,6 +7,10 @@ import NativeSelect from '@material-ui/core/NativeSelect';
 import {BeatLoader} from 'react-spinners'
 import AddIcon from '@material-ui/icons/Add';
 import SaveIcon from '@material-ui/icons/Save';
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import InputAdornment from '@material-ui/core/InputAdornment';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
 
 const useStyles = makeStyles((theme) => ({
     modal: {
@@ -140,15 +144,49 @@ const AddEmployeeModal = () =>{
         <div>
          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div>
-          <TextField type="text" variant="outlined" error={errors.firstName? true : false} {...register("firstName", {required : "Please fill up this field"})} label="First Name" helperText={errors.firstName && errors.firstName.message}/>
+          <TextField type="text" variant="outlined" 
+            error={errors.firstName? true : false} 
+            {...register("firstName", {required : "Please fill up this field"})} 
+            label="First Name" 
+            helperText={errors.firstName && errors.firstName.message}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              )
+            }}
+            />
           </div>
 
           <div>
-          <TextField type="text" variant="outlined" error={errors.lastName? true : false} {...register("lastName", {required : "Please fill up this field"})} label="Last Name" helperText={errors.lastName && errors.lastName.message}/>
+          <TextField type="text" variant="outlined" 
+          error={errors.lastName? true : false} 
+          {...register("lastName", {required : "Please fill up this field"})} 
+          label="Last Name" helperText={errors.lastName && errors.lastName.message}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircleIcon />
+              </InputAdornment>
+            )
+          }}
+          />
           </div>
 
           <div>
-          <TextField type="text" variant="outlined" error={errors.address? true : false} {...register("address", {required : "Please fill up this field"})} label="Address" placeholder="city, country" helperText={errors.address && errors.address.message}/>
+          <TextField type="text" variant="outlined" error={errors.address? true : false} 
+          {...register("address", {required : "Please fill up this field"})} 
+          label="Address" 
+          helperText={errors.address && errors.address.message}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <HomeIcon />
+              </InputAdornment>
+            )
+          }}
+          />
           </div> 
 
         <div>
@@ -165,6 +203,7 @@ const AddEmployeeModal = () =>{
             <option value="FRONTEND">Front-end</option>
             <option value="BACKEND">Back-end</option>
             <option value="CS">CS</option>
+            <option value="DATA_ANALYST">Data Analyst</option>
             <option value="CONTENT WRITER">Content writer</option>
             <option value="ENCODER">Encoder</option>
           </NativeSelect>

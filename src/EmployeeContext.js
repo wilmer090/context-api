@@ -22,14 +22,39 @@ const initialState = {
         emp_id: '1619592682481'
     },
     {
+        firstName : 'JASMINE',
+        lastName : 'BLOW',
+        address : 'LOS ANGLES, USA',
+        status : 'ACTIVE',
+        position : 'FRONTEND',
+        emp_id: '1619592683592'
+    },
+    {
+        firstName : 'STEVEN',
+        lastName : 'PETTERSON',
+        address : 'CHICAGO, USA',
+        status : 'ACTIVE',
+        position : 'CS',
+        emp_id: '1619592687544'
+    },
+    {
         firstName : 'MICHAEL',
         lastName : 'SAN JUAN',
         address : 'MANILA, PHILIPPINES',
         status : 'ACTIVE',
-        position: 'DATA ANALYST',
+        position: 'DATA_ANALYST',
         emp_id: '1619592682679'
-    }]
+    },{
+        firstName : 'ANDREW',
+        lastName : 'UY',
+        address : 'BINONDO, PHILIPPINES',
+        status : 'ACTIVE',
+        position: 'FRONTEND',
+        emp_id: '1619592683784'
+    }
+    ]
 }
+
 
 export const EmployeeContext = createContext(initialState);
 
@@ -37,6 +62,12 @@ export const EmployeeProvider = (props) =>{
 
     const [state, dispatch] = useReducer(AppReducer, initialState)
 
+   const dept =  state.employees.reduce((acc,obj) => {
+       return {...acc, [obj.position] : (acc[obj.position] || 0) + 1}
+   },{})
+
+   console.log(Object.entries(dept))
+   console.log(dept)
     //ACTIONS
 
     const addEmployee  = (employeeData) =>{

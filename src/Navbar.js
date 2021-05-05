@@ -27,7 +27,7 @@ const Navbar = () =>{
             <Toolbar>
              
               <Typography variant="h6" className={classes.title}>
-                News
+                OUR TEAM
               </Typography>
       
             </Toolbar>

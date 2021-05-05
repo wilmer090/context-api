@@ -10,6 +10,12 @@ import NativeSelect from '@material-ui/core/NativeSelect'
 import {BeatLoader} from 'react-spinners'
 import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import InputAdornment from '@material-ui/core/InputAdornment';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import HomeIcon from '@material-ui/icons/Home';
+
+
 const useStyles = makeStyles((theme) => ({
     editComponent: {
       display: "flex",
@@ -141,11 +147,35 @@ export const EditEmployeeInfo = ({match}) => {
 
         <form onSubmit={onSubmit} className={classes.editform} autoComplete="off">
         
-        <TextField type="text" onChange={handleData} variant="outlined" name="firstName" value={selectedEmpInfo.firstName} />
+        <TextField type="text" onChange={handleData} variant="outlined" name="firstName" value={selectedEmpInfo.firstName} 
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AccountCircle />
+                </InputAdornment>
+              )
+            }}
+        />
     
-        <TextField type="text" onChange={handleData} variant="outlined" name="lastName" value={selectedEmpInfo.lastName} />
+        <TextField type="text" onChange={handleData} variant="outlined" name="lastName" value={selectedEmpInfo.lastName} 
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircleIcon />
+              </InputAdornment>
+            )
+          }}
+        />
     
-        <TextField type="text" onChange={handleData} variant="outlined" name="address" value={selectedEmpInfo.address} />
+        <TextField type="text" onChange={handleData} variant="outlined" name="address" value={selectedEmpInfo.address} 
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <HomeIcon />
+              </InputAdornment>
+            )
+          }}
+        />
          
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-mutiple-name-label">Position</InputLabel>
